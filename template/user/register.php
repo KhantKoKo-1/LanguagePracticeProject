@@ -1,0 +1,149 @@
+<?php
+require_once("../../require/common.php");
+require_once("../../require/authentication.php");
+require_once("../../config/db.php");
+require_once("../../config/user_db.php");
+
+$name = $email = "";
+$name_err = $email_err = $password_err =  $comfirm_password_err = "";
+
+$validate = true;
+$success = false;
+$invalid = false;
+
+if (isset($_POST['register'])) {
+  $name = $mysqli->real_escape_string($_POST["name"]); 
+  $email = $mysqli->real_escape_string($_POST["email"]);
+  $password = $mysqli->real_escape_string($_POST["password"]);
+  $comfirm_password = $mysqli->real_escape_string($_POST["comfirm_password"]);
+
+  if ($name === "") {
+    $validate = false;
+    $name_err = "Email must not be blank!";
+  }
+
+  if ($email === "") {
+    $validate  = false;
+    $email_err = "Email must not be blank!";
+  } else {
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $validate     = false;
+      $email_err = "Please fill vaild email!";
+    }
+  }
+
+  if ($password === "") {
+      $validate = false;
+      $password_err = "Password must not be blank!";
+  }
+
+  if ($comfirm_password === "") {
+      $validate = false;
+      $comfirm_password_err = "Comfirm password must not be blank!";
+  }
+
+  if ($validate) {
+    if ($password !== $comfirm_password) {
+      $validate = false;
+      $comfirm_password_err = "[ Password ] and [ Comfirm Password ] must be same!";
+    } else {
+      $hash_password = password_hash($password, PASSWORD_DEFAULT);
+      $result = save_user($mysqli, $name, $email,$hash_password);
+      if(!$result) {
+        $invalid = true;
+      } else {
+        header("Refresh: 0; url=$base_url");
+        exit();
+      }
+
+        // $user = get_user_by_email($mysqli, $email);
+
+        // $match = password_verify($password, $user['password']);
+        // if ($match) {
+        //     $success = true;
+        //     setcookie("user", json_encode($user), time() + 3600 * 24 * 7, '/');
+        //     if ($customer['is_admin']) {
+        //         header("Location: ../admin/index.php");
+        //     } else {
+        //         header("Location: ../user/index.php");
+        //     }
+        // } else {
+        //     $invalid = true;
+        // }
+    }
+    
+  }}
+?>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Corona Admin</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="<?php echo $base_url;?>assets/common/css/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="<?php echo $base_url;?>assets/common/css/vendors/vendor.bundle.base.css">
+    <link rel="stylesheet" href="<?php echo $base_url;?>assets/common/css/style.css">
+    <link rel="shortcut icon" href="<?php echo $base_url;?>assets/common/images/favicon.png" />
+  </head>
+  <body>
+    <div class="container-scroller">
+      <div class="container-fluid page-body-wrapper full-page-wrapper">
+        <div class="row w-100 m-0">
+          <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+            <div class="card col-lg-4 mx-auto">
+              <div class="card-body px-5 py-5">
+                <h3 class="card-title text-left mb-3">Register</h3>
+                <?= $invalid ? 'User was not created!' : '' ?>
+                <form method="POST">
+                  <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" name="name" class="form-control p_input" value="<?php echo htmlspecialchars($name);?>">
+                    <p style="color:red"><?= $name_err ?></p>
+                  </div>
+                  <div class="form-group">
+                    <label>Email</label>
+                    <input type="text" name="email" class="form-control p_input" value="<?php echo htmlspecialchars($email);?>">
+                    <p style="color:red"><?= $email_err ?></p>
+                  </div>
+                  <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" class="form-control p_input">
+                    <p style="color:red"><?= $password_err ?></p>
+                  </div>
+                  <div class="form-group">
+                    <label>Comfirm Password</label>
+                    <input type="password" name="comfirm_password" class="form-control p_input">
+                    <p style="color:red"><?= $comfirm_password_err ?></p>
+                  </div>
+                  <div class="text-center">
+                    <button type="submit" name="register" class="btn btn-primary btn-block enter-btn">Register</button>
+                  </div>
+                  <p class="sign-up text-center">Already have an Account?<a href="<?php echo $base_url;?>"> Sign In</a></p>
+                  <p class="terms">By creating an account you are accepting our<a href="#"> Terms & Conditions</a></p>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+        </div>
+        <!-- row ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <!-- <script src="../../assets/vendors/js/vendor.bundle.base.js"></script> -->
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <!-- <script src="../../assets/js/off-canvas.js"></script>
+    <script src="../../assets/js/hoverable-collapse.js"></script>
+    <script src="../../assets/js/misc.js"></script>
+    <script src="../../assets/js/settings.js"></script>
+    <script src="../../assets/js/todolist.js"></script> -->
+    <!-- endinject -->
+  </body>
+</html>
