@@ -1,6 +1,7 @@
 <?php
 $base_dir = __DIR__;
 require_once($base_dir . '/z_db_seeder.php');
+require_once($base_dir . '/user_db.php');
 $mysqli = new mysqli("localhost", "root", "");
 
 if ($mysqli->connect_error) {
@@ -33,7 +34,7 @@ function create_table($mysqli)
         -- `u_address` VARCHAR(255) NOT NULL,
         `u_password` VARCHAR(255) NOT NULL,
         `role` TINYINT NOT NULL DEFAULT 1 COMMENT '0 for admin, 0 for user',
-        `created_by` INT NOT NULL,
+        `created_by` INT DEFAULT 0 COMMENT '0 for created by user',
         `created_at` DATETIME NOT NULL,
         `updated_by` INT DEFAULT NULL,
         `updated_at` DATETIME DEFAULT NULL,
@@ -96,5 +97,11 @@ function create_table($mysqli)
 create_db($mysqli);
 select_db($mysqli);
 create_table($mysqli);
-run_seeder($mysqli);
+$count = count_user($mysqli);
+
+if ($count == 0) {
+    run_seeder($mysqli);
+}
+
+
 ?>

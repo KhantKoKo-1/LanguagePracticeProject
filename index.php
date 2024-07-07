@@ -49,19 +49,20 @@ if (isset($_POST['login'])) {
             if ($remember == '1') {
               $cookie_value = serialize($user);
               setcookie("user", $cookie_value, time() + (86400 * 30), "/");
-            } else {
-              if($role == $admin_enable_status) {
-                $_SESSION['admin']['id']       = $id ;
-                $_SESSION['admin']['email']    = $user['u_email'];
-                $_SESSION['admin']['username'] = $user['u_name'];
-                $url =  $admin_base_url;
-              } else {
-                $_SESSION['user']['id']       = $id ;
-                $_SESSION['user']['email']    = $user['u_email'];
-                $_SESSION['user']['username'] = $user['u_name'];
-                $url =  $user_base_url;
-              }
             }
+            
+            if($role == $admin_enable_status) {
+              $_SESSION['admin']['id']       = $id ;
+              $_SESSION['admin']['email']    = $user['u_email'];
+              $_SESSION['admin']['username'] = $user['u_name'];
+              $url =  $admin_base_url;
+            } else {
+              $_SESSION['user']['id']       = $id ;
+              $_SESSION['user']['email']    = $user['u_email'];
+              $_SESSION['user']['username'] = $user['u_name'];
+              $url =  $user_base_url;
+            }
+            
             header("Refresh: 0; url=$url");
             exit();
           }

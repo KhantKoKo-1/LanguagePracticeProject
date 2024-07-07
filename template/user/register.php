@@ -55,21 +55,6 @@ if (isset($_POST['register'])) {
         header("Refresh: 0; url=$base_url");
         exit();
       }
-
-        // $user = get_user_by_email($mysqli, $email);
-
-        // $match = password_verify($password, $user['password']);
-        // if ($match) {
-        //     $success = true;
-        //     setcookie("user", json_encode($user), time() + 3600 * 24 * 7, '/');
-        //     if ($customer['is_admin']) {
-        //         header("Location: ../admin/index.php");
-        //     } else {
-        //         header("Location: ../user/index.php");
-        //     }
-        // } else {
-        //     $invalid = true;
-        // }
     }
     
   }}
@@ -95,7 +80,12 @@ if (isset($_POST['register'])) {
             <div class="card col-lg-4 mx-auto">
               <div class="card-body px-5 py-5">
                 <h3 class="card-title text-left mb-3">Register</h3>
-                <?= $invalid ? 'User was not created!' : '' ?>
+                <?php if($invalid) {?> 
+                <div class="alert">
+                  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                  <p>User was not created!</p>
+                </div>
+              <?php } ?>
                 <form method="POST">
                   <div class="form-group">
                     <label>Username</label>
@@ -145,5 +135,6 @@ if (isset($_POST['register'])) {
     <script src="../../assets/js/settings.js"></script>
     <script src="../../assets/js/todolist.js"></script> -->
     <!-- endinject -->
+    <script src="<?php echo $base_url;?>assets/common/js/alert.js"></script>
   </body>
 </html>
