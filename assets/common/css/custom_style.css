@@ -25,6 +25,13 @@
 
   #remember-label{
    margin-top:2%;
-   color:yellowgreen;
+   color:#36a8f5;
    cursor: pointer;
   }
+
+  .card{
+    background-color: #f7c8f3;
+    color: black;
+    font-weight: bold;
+  }
+ 

@@ -2,7 +2,7 @@
 
 function count_user($mysqli)
 {
-    $sql = "SELECT * FROM user WHERE deleted_at IS NULL";
+    $sql = "SELECT * FROM `user`";
     $result = $mysqli->query($sql);
     $num_row = 0;
     if ($result) {
@@ -13,7 +13,7 @@ function count_user($mysqli)
 
 function get_user_by_email($mysqli, $email)
 {
-    $sql = "SELECT * FROM user WHERE user.u_email = '$email' WHERE deleted_at IS NULL";
+    $sql = "SELECT * FROM `user` WHERE user.u_email = '$email'";
     $result = $mysqli->query($sql);
 
     return $result->fetch_assoc();

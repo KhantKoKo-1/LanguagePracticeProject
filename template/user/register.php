@@ -70,6 +70,7 @@ if (isset($_POST['register'])) {
     <link rel="stylesheet" href="<?php echo $base_url;?>assets/common/css/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="<?php echo $base_url;?>assets/common/css/vendors/vendor.bundle.base.css">
     <link rel="stylesheet" href="<?php echo $base_url;?>assets/common/css/style.css">
+    <link rel="stylesheet" href="<?php echo $base_url;?>assets/common/css/custom_style.css">
     <link rel="shortcut icon" href="<?php echo $base_url;?>assets/common/images/favicon.png" />
   </head>
   <body>
@@ -79,7 +80,7 @@ if (isset($_POST['register'])) {
           <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
             <div class="card col-lg-4 mx-auto">
               <div class="card-body px-5 py-5">
-                <h3 class="card-title text-left mb-3">Register</h3>
+                <h3 class="card-title text-left mb-3 d-flex justify-content-center text-dark">Register</h3>
                 <?php if($invalid) {?> 
                 <div class="alert">
                   <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
