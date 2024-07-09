@@ -23,10 +23,19 @@
                 <h3 class="menu-title">Pages</h3><!-- /.menu-title -->
                 <li class="menu-item-has-children dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false"> <i class="menu-icon fa fa-laptop"></i>Category</a>
+                    <ul class="sub-menu children dropdown-menu">
+                        <li><i class="fa fa-puzzle-piece"></i><a href="<?php echo $admin_base_url ?>category/level_form.php">Level Form</a></li>
+                        <li><i class="fa fa-puzzle-piece"></i><a href="<?php echo $admin_base_url ?>category/type_form.php">Type Form</a></li>
+                        <li><i class="fa fa-id-badge"></i><a href="<?php echo $admin_base_url ?>category/table_list.php">Table List</a></li>
+                    </ul>
+                </li>
+                <li class="menu-item-has-children dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false"> <i class="menu-icon fa fa-laptop"></i>Questions</a>
                     <ul class="sub-menu children dropdown-menu">
-                        <li><i class="fa fa-puzzle-piece"></i><a href="ui-buttons.html">Create</a></li>
-                        <li><i class="fa fa-id-badge"></i><a href="ui-badges.html">Table List</a></li>
+                        <li><i class="fa fa-puzzle-piece"></i><a href="<?php echo $admin_base_url ?>questions/index.php">Create</a></li>
+                        <li><i class="fa fa-id-badge"></i><a href="<?php echo $admin_base_url ?>questions/table_list.php">Table List</a></li>
                     </ul>
                 </li>
                 <li class="menu-item-has-children dropdown">

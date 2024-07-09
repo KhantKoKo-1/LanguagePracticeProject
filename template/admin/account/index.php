@@ -26,9 +26,9 @@ require_once ("../../../layout/admin/nav.php");
 <!-- <div class="row"> -->
 <div class="content mt-3">
     <div class="animated fadeIn">
-    
+
         <div class="card">
-            <div class="card-header">Example Form</div>
+            <div class="card-header d-flex justify-content-center fw-bold">Create Account Form</div>
             <div class="card-body card-block">
                 <form action="" method="post" class="">
                     <div class="form-group">
@@ -58,13 +58,27 @@ require_once ("../../../layout/admin/nav.php");
                                 class="form-control">
                         </div>
                     </div>
-                    <div class="form-actions form-group">
-                        <button type="submit" class="btn btn-success btn-sm">Submit</button>
-                        <button type="reset" class="btn btn-danger btn-sm">
-                            <i class="fa fa-ban"></i> Reset
-                        </button>
-                    </div>
-                    
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="form-check-inline form-check">
+                                <label for="admin" class="form-check-label ">
+                                    <input type="radio" id="admin" name="role" value="<?php echo $admin_role?>"
+                                        class="form-check-input">admin
+                                </label>
+                                &nbsp;&nbsp;
+                                <label for="user" class="form-check-label ">
+                                    <input type="radio" id="user" name="role" value="<?php echo $user_role?>"
+                                        class="form-check-input">User
+                                </label>
+                            </div>
+                        </div>
+                        </br>
+                        <div class="form-actions form-group">
+                            <button type="submit" class="btn btn-success btn-sm">Submit</button>
+                            <button type="reset" class="btn btn-danger btn-sm">
+                                <i class="fa fa-ban"></i> Reset
+                            </button>
+                        </div>
                 </form>
             </div>
         </div>
