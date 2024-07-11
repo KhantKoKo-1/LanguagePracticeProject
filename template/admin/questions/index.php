@@ -17,7 +17,7 @@ require_once ("../../../layout/admin/nav.php");
             <div class="page-title">
                 <ol class="breadcrumb text-right">
                     <li><a href="<?php echo $admin_base_url . 'dashboard/' ?>">Dashboard</a></li>
-                    <li class="active">Create Level/li>
+                    <li class="active">Create Level</li>
                 </ol>
             </div>
         </div>
@@ -68,7 +68,10 @@ require_once ("../../../layout/admin/nav.php");
                     <div class="row form-group">
                         <div class="col col-md-2"><label for="quiz" class=" form-control-label">
                                 Add Quiz</label></div>
-                        <div class="col-2 col-md-2"><input type="button" id="add-quiz"  class="btn btn-info" value="Add Quizs"></div>
+                        <div class="col-2 col-md-2">
+                            <button type="button" id="" class="btn btn-info btm-sm" data-toggle="modal"
+                                data-target="#quizModal">Add quiz</button>
+                        </div>
                     </div>
                     <div class="row form-group">
                         <div class="col col-md-2"><label for="quiz" class=" form-control-label">
@@ -76,6 +79,8 @@ require_once ("../../../layout/admin/nav.php");
                         <div class="col-2 col-md-2"><input type="text" id="quiz" name="quiz" placeholder="" disabled=""
                                 class="form-control"></div>
                     </div>
+                    <!-- Modal markup -->
+
                 </form>
             </div>
             <div class="card-footer d-flex justify-content-center">
@@ -91,6 +96,33 @@ require_once ("../../../layout/admin/nav.php");
         <!-- </div> -->
     </div>
 </div>
+
+<div class="modal fade" id="quizModal" tabindex="-1" aria-labelledby="quizLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="quizLabel">Quiz Form</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                <button type="button" id="addQuiz" class="btn btn-info btn-sm">+</button>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Quizs:</label>
+                        <input type="text" class="form-control" id="recipient-name">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <?php
 require_once ("../../../layout/admin/footer.php");
 ?>

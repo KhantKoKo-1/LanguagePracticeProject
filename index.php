@@ -1,7 +1,9 @@
 <?php
+session_start();
 require_once ("./require/common.php");
 require_once ("./config/db.php");
 require_once ("./config/user_db.php");
+require_once ("./require/check_cookies.php");
 
 $email = $password = $remember = "";
 $email_err = $password_err = $credition_err = "";
@@ -46,8 +48,7 @@ if (isset($_POST['login'])) {
           $id = (int) ($user['user_id']);
           $role = $user['role'];
           if ($remember == '1') {
-            $cookie_value = serialize($user);
-            setcookie("user", $cookie_value, time() + (86400 * 30), "/");
+            setcookie("id", $id, time() + (86400 * 30), "/");
           }
 
           if ($role == $admin_enable_status) {

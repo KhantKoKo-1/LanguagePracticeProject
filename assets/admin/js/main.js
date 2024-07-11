@@ -27,6 +27,10 @@ jQuery(document).ready(function($) {
 		$('.search-trigger').parent('.header-left').removeClass('open');
 	});
 
+	$('#resetBtn').click(function() {
+        $('#myForm')[0].reset(); // Reset the form using DOM method
+    });
+
 	// $('.user-area> a').on('click', function(event) {
 	// 	event.preventDefault();
 	// 	event.stopPropagation();
@@ -36,3 +40,4 @@ jQuery(document).ready(function($) {
 
 
 });
+

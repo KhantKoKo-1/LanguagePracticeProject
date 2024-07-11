@@ -29,7 +29,7 @@ function create_table($mysqli)
 {
     $sql = "CREATE TABLE IF NOT EXISTS `users` (
         `user_id` INT AUTO_INCREMENT,
-        `name` VARCHAR(20) NOT NULL,
+        `name` VARCHAR(20) NOT NULL UNIQUE,
         `email` VARCHAR(45) NOT NULL UNIQUE,
         -- `u_address` VARCHAR(255) NOT NULL,
         `password` VARCHAR(255) NOT NULL,
@@ -50,7 +50,7 @@ function create_table($mysqli)
 
     $sql = "CREATE TABLE IF NOT EXISTS `level`(
         `level_id` INT AUTO_INCREMENT, 
-        `level_name` VARCHAR (20) NOT NULL,
+        `level_name` VARCHAR (100) NOT NULL UNIQUE,
         `created_by` INT NOT NULL,
         `created_at` DateTime NOT NULL,
         `updated_by` INT DEFAULT NULL,
@@ -67,7 +67,7 @@ function create_table($mysqli)
 
     $sql = "CREATE TABLE IF NOT EXISTS `type`(
         `type_id` INT AUTO_INCREMENT , 
-        `name` VARCHAR (255) NOT NULL,
+        `type_name` VARCHAR (100) NOT NULL UNIQUE,
         `created_by` INT NOT NULL,
         `created_at` DateTime NOT NULL,
         `updated_by` INT DEFAULT NULL,

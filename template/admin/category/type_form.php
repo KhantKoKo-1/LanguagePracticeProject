@@ -1,14 +1,46 @@
 <?php
-$title = 'Dashboard';
+$title = 'Type Form';
 require_once ("../../../layout/admin/header.php");
 require_once ("../../../layout/admin/sidebar.php");
 require_once ("../../../layout/admin/nav.php");
+require_once ("../../../config/type_db.php");
+$type_name       =  "";
+$type_err        =  "";
+$error_message   =  "";
+$success_message =  "";
+$success         = false;
+$error           = false;
+
+if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
+    $type_name = $mysqli->real_escape_string($_POST["type_name"]);
+    if ($type_name == "") {
+        $type_err = "Please Enter Type Name!"; 
+        $error = true;
+    }
+
+    if ($error == false) {
+        $current_date_time = date('Y-m-d H:i:s');
+        try {
+            $result = save_type($mysqli, $type_name, $user_id, $current_date_time);
+        if ($result) {
+            $success = true;
+            $success_message = "Create Type Successful!";
+        }
+    }
+        catch (Exception $e) {
+            // Handle exceptions (e.g., duplicate entry error)
+            $error_message = $e->getMessage();
+            $error = true;
+        }
+    }
+}
+
 ?>
 <div class="breadcrumbs">
     <div class="col-sm-4">
         <div class="page-header float-left">
             <div class="page-title">
-                <h1>Create Type</h1>
+                <h1>Create Type Form</h1>
             </div>
         </div>
     </div>
@@ -23,36 +55,62 @@ require_once ("../../../layout/admin/nav.php");
         </div>
     </div>
 </div>
-<!-- <div class="row"> -->
+
+
 <div class="content mt-3">
     <div class="animated fadeIn">
-    <div class="row justify-content-center">
-        <div class="card w-75 mt-5">
-            <div class="card-header d-flex justify-content-center">
-                <strong>Type &nbsp;</strong> Form
+        <!-- <div class="row"> -->
+        <?php if ($success) { ?>
+        <div class="alert alert-success w-75 mx-auto" role="alert">
+            <div class="d-flex justify-content-center">
+                <?php echo $success_message ?>
             </div>
-            <div class="card-body card-block">
+        </div>
+        <?php } ?>
+
+        <?php if ($error) { ?>
+        <div class="alert alert-danger w-75 mx-auto" role="alert">
+            <div class="d-flex justify-content-center">
+            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <?php echo $error_message ?>
+            </div>
+        </div>
+        <?php } ?>
+
+        <div class="row justify-content-center">
+            <div class="card w-75 mt-5">
+                <div class="card-header d-flex justify-content-center">
+                    <strong>Type &nbsp;</strong> Form
+                </div>
                 <form action="" method="post" class="form-horizontal">
-                    <div class="row form-group">
-                        <div class="col col-md-2 offset-2 mt-2 bold"><label for="type_name" class="form-control-label">Type Name</label></div>
-                        <div class="col-6 col-md-6"><input type="text" id="type_name" name="type_name"
-                                placeholder="Enter Type Name" class="form-control">
-                            <span class="help-block text-danger">Please Enter Type Name</span></div>
+                    <div class="card-body card-block">
+                        <div class="row form-group">
+                            <div class="col col-md-2 offset-2 mt-2 bold">
+                                <label for="type_name" class="form-control-label">Type Name</label>
+                            </div>
+                            <div class="col-6 col-md-6">
+                                <input type="text" id="type_name" name="type_name" placeholder="Enter type Name"
+                                    class="form-control" value="<?php echo $type_name; ?>">
+                                <?php if ($type_err !== '') { ?>
+                                    <span class="help-block text-danger"><?php echo $type_err; ?></span>
+                                <?php } ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer d-flex justify-content-center">
+                        <button type="submit" value="1" name="Submit" class="btn btn-primary btn-sm">
+                            <i class="fa fa-dot-circle-o"></i> Create
+                        </button>
+                        <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                        <button type="reset" id="resetBtn" class="btn btn-danger btn-sm">
+                            <i class="fa fa-ban"></i> Reset
+                        </button>
                     </div>
                 </form>
-            </div>
-            <div class="card-footer d-flex justify-content-center">
-                <button type="submit" class="btn btn-primary btn-sm">
-                    <i class="fa fa-dot-circle-o"></i> Submit
-                </button>
-                <span>&nbsp;&nbsp;&nbsp;&nbsp;</span> 
-                <button type="reset" class="btn btn-danger btn-sm">
-                    <i class="fa fa-ban"></i> Reset
-                </button>
+
             </div>
         </div>
     </div>
-</div>
 </div>
 <?php
 require_once ("../../../layout/admin/footer.php");

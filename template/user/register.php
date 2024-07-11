@@ -1,15 +1,16 @@
 <?php
 require_once("../../require/common.php");
-require_once("../../require/authentication.php");
 require_once("../../config/db.php");
 require_once("../../config/user_db.php");
+// require_once("../../require/authentication.php");
 
 $name = $email = "";
 $name_err = $email_err = $password_err =  $comfirm_password_err = "";
 
-$validate = true;
-$success = false;
-$invalid = false;
+$validate    = true;
+$success     = false;
+$invalid     = false;
+$invalid_err = false;
 
 if (isset($_POST['register'])) {
   $name = $mysqli->real_escape_string($_POST["name"]); 
@@ -48,6 +49,7 @@ if (isset($_POST['register'])) {
       $comfirm_password_err = "[ Password ] and [ Comfirm Password ] must be same!";
     } else {
       $hash_password = password_hash($password, PASSWORD_DEFAULT);
+      try {
       $result = save_user($mysqli, $name, $email,$hash_password);
       if(!$result) {
         $invalid = true;
@@ -55,6 +57,16 @@ if (isset($_POST['register'])) {
         header("Refresh: 0; url=$base_url");
         exit();
       }
+    }
+      catch (Exception $e) {
+        // Handle exceptions (e.g., duplicate entry error)
+        if ($e->getCode() === '23000') {
+            $invalid_err = "Duplicate entry error. This email or username is already taken.";
+        } else {
+            $invalid_err = "" . $e->getMessage();
+        }
+        $invalid = true;
+    }
     }
     
   }}
@@ -65,7 +77,7 @@ if (isset($_POST['register'])) {
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Corona Admin</title>
+    <title>Register Form</title>
     <!-- plugins:css -->
     <link rel="stylesheet" href="<?php echo $base_url;?>assets/common/css/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="<?php echo $base_url;?>assets/common/css/vendors/vendor.bundle.base.css">
@@ -84,7 +96,7 @@ if (isset($_POST['register'])) {
                 <?php if($invalid) {?> 
                 <div class="alert">
                   <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-                  <p>User was not created!</p>
+                  <p><?php echo $invalid_err ?></p>
                 </div>
               <?php } ?>
                 <form method="POST">
@@ -123,19 +135,6 @@ if (isset($_POST['register'])) {
       </div>
       <!-- page-body-wrapper ends -->
     </div>
-    <!-- container-scroller -->
-    <!-- plugins:js -->
-    <!-- <script src="../../assets/vendors/js/vendor.bundle.base.js"></script> -->
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <!-- <script src="../../assets/js/off-canvas.js"></script>
-    <script src="../../assets/js/hoverable-collapse.js"></script>
-    <script src="../../assets/js/misc.js"></script>
-    <script src="../../assets/js/settings.js"></script>
-    <script src="../../assets/js/todolist.js"></script> -->
-    <!-- endinject -->
     <script src="<?php echo $base_url;?>assets/common/js/alert.js"></script>
   </body>
 </html>

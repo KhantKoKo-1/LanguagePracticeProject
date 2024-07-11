@@ -30,8 +30,8 @@ function update_level($mysqli, $c_id, $c_name, $email, $address, $password)
     return false;
 }
 
-function save_level($mysqli, $name){
-    $sql = "INSERT INTO `level`(`level_name`) VALUES ('$name')";
+function save_level($mysqli, $name, $created_by, $created_at){
+    $sql = "INSERT INTO `level`(`level_name`, `created_by`, `created_at`) VALUES ('$name', $created_by, '$created_at')";
     if($mysqli->query($sql)){
         return true;
     }
