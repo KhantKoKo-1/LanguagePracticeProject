@@ -1,17 +1,5 @@
 <?php
 
-// function save_level($mysqli, $c_name, $email, $address, $password)
-// {
-//     $sql = "INSERT INTO `level`(`c_name`,`email`,`address`,`password`) VALUES ('$c_name','$email','$address','$password')";
-//     if ($mysqli->query($sql)) {
-//         return true;
-//     }
-//     return false;
-// }
-
-
-
-
 function get_all_levels($mysqli)
 {
     $sql = "SELECT * FROM `level`";

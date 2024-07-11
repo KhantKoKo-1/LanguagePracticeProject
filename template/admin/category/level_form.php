@@ -3,6 +3,19 @@ $title = 'Level Form';
 require_once ("../../../layout/admin/header.php");
 require_once ("../../../layout/admin/sidebar.php");
 require_once ("../../../layout/admin/nav.php");
+$level_name =  "";
+$level_err  = "";
+if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
+    $level_name = $mysqli->real_escape_string($_POST["level_name"]);
+    if ($level_name == "") {
+        $level_err = "Please fill vaild email!";  
+    }
+
+    if ($level_err !== '') {
+        
+    }
+}
+
 ?>
 <div class="breadcrumbs">
     <div class="col-sm-4">
@@ -44,8 +57,8 @@ require_once ("../../../layout/admin/nav.php");
                     </form>
                 </div>
                 <div class="card-footer d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary btn-sm">
-                        <i class="fa fa-dot-circle-o"></i> Submit
+                    <button type="submit" value="1" name="Submit" class="btn btn-primary btn-sm">
+                        <i class="fa fa-dot-circle-o"></i> Create
                     </button>
                     <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                     <button type="reset" class="btn btn-danger btn-sm">

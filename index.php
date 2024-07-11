@@ -1,6 +1,5 @@
 <?php
 require_once ("./require/common.php");
-require_once ("./require/authentication.php");
 require_once ("./config/db.php");
 require_once ("./config/user_db.php");
 
@@ -40,11 +39,11 @@ if (isset($_POST['login'])) {
     }
 
     if ($user) {
-      $match = password_verify($password, $user['u_password']);
+      $match = password_verify($password, $user['password']);
 
       if ($match) {
         while ($user) {
-          $id = (int) ($user['u_id']);
+          $id = (int) ($user['user_id']);
           $role = $user['role'];
           if ($remember == '1') {
             $cookie_value = serialize($user);
@@ -52,14 +51,14 @@ if (isset($_POST['login'])) {
           }
 
           if ($role == $admin_enable_status) {
-            $_SESSION['admin']['id'] = $id;
-            $_SESSION['admin']['email'] = $user['u_email'];
-            $_SESSION['admin']['username'] = $user['u_name'];
+            $_SESSION['admin']['user_id'] = $id;
+            $_SESSION['admin']['email'] = $user['email'];
+            $_SESSION['admin']['username'] = $user['name'];
             $url = $admin_base_url . 'dashboard/';
           } else {
-            $_SESSION['user']['id'] = $id;
-            $_SESSION['user']['email'] = $user['u_email'];
-            $_SESSION['user']['username'] = $user['u_name'];
+            $_SESSION['user']['user_id'] = $id;
+            $_SESSION['user']['email'] = $user['email'];
+            $_SESSION['user']['username'] = $user['name'];
             $url = $user_base_url . 'dashboard/';
           }
 
