@@ -1,13 +1,7 @@
 <?php
-function save_level($mysqli){
-    $sql = "INSERT INTO `level`(`level_id`,`level_name`,`description`) VALUES ('1','N5')";
-    if($mysqli->query($sql)){
-        return true;
-    }
-    return false;
-}
-function save_question($mysqli,$quizz_id,){
-    $sql = "INSERT INTO `item`(`i_name`,`price`,`qty`,`b_id`,`description`) VALUES ('$i_name',$price,$qty,$b_id,'$description')";
+function save_questions($mysqli, $description, $level_id, $type_id, $created_by) {
+    $currentDateTime = date('Y-m-d H:i:s');
+    $sql = "INSERT INTO `questions`(`description`, `level_id`, `type_id`, `created_by`, `created_at`) VALUES ('$description', $level_id, $type_id, $created_by, '$currentDateTime')";
     if($mysqli->query($sql)){
         return true;
     }

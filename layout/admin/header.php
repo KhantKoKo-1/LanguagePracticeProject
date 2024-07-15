@@ -30,6 +30,7 @@ require_once("../../../config/user_db.php");
     <link rel="stylesheet" href="<?php echo $base_url;?>assets/admin/vendors/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="<?php echo $base_url;?>assets/admin/vendors/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
     <link rel="stylesheet" href="<?php echo $base_url;?>assets/admin/css/style.css">
+    <link rel="stylesheet" href="<?php echo $base_url;?>assets/admin/css/custom_style.css">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
 </head>
 

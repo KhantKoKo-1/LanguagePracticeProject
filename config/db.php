@@ -84,7 +84,7 @@ function create_table($mysqli)
 
     $sql = "CREATE TABLE IF NOT EXISTS `questions`(
         `question_id` INT AUTO_INCREMENT,
-        `description` VARCHAR(255) NOT NULL,
+        `description` TEXT NOT NULL,
         `level_id` INT NOT NULL,
         `type_id` INT NOT NULL,
         `created_by` INT NOT NULL,
@@ -103,7 +103,7 @@ function create_table($mysqli)
         return false;
     }
 
-    $sql = "CREATE TABLE IF NOT EXISTS `quizz`(
+    $sql = "CREATE TABLE IF NOT EXISTS `quiz`(
         `q_id` INT AUTO_INCREMENT,
         `description` VARCHAR(255) NOT NULL,
         `is_correct` BOOLEAN NOT NULL,

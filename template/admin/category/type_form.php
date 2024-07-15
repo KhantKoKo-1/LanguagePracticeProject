@@ -4,6 +4,7 @@ require_once ("../../../layout/admin/header.php");
 require_once ("../../../layout/admin/sidebar.php");
 require_once ("../../../layout/admin/nav.php");
 require_once ("../../../config/type_db.php");
+
 $type_name       =  "";
 $type_err        =  "";
 $error_message   =  "";
@@ -19,9 +20,8 @@ if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
     }
 
     if ($error == false) {
-        $current_date_time = date('Y-m-d H:i:s');
         try {
-            $result = save_type($mysqli, $type_name, $user_id, $current_date_time);
+            $result = save_type($mysqli, $type_name, $user_id);
         if ($result) {
             $success = true;
             $success_message = "Create Type Successful!";

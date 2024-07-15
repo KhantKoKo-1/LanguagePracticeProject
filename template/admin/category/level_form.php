@@ -19,9 +19,8 @@ if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
     }
 
     if ($error == false) {
-        $current_date_time = date('Y-m-d H:i:s');
         try {
-            $result = save_level($mysqli, $level_name, $user_id, $current_date_time);
+            $result = save_level($mysqli, $level_name, $user_id);
         if ($result) {
             $success = true;
             $success_message = "Create Level Successful!";
