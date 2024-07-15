@@ -1,9 +1,12 @@
 <!-- partial:partials/_footer.html -->
 <script src="<?php echo $base_url;?>assets/admin/vendors/jquery/jquery.min.js"></script>
+<script src="<?php echo $base_url;?>assets/admin/vendors/jquery/jquery-3.7.1.js"></script>
 <script src="<?php echo $base_url;?>assets/admin/vendors/popper.js/dist/umd/popper.min.js"></script>
 <script src="<?php echo $base_url;?>assets/admin/vendors/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="<?php echo $base_url;?>assets/admin/js/main.js"></script>
+<script src="<?php echo $base_url;?>assets/admin/js/pnotify.all.min.js"></script>
 <script src="<?php echo $base_url;?>assets/common/js/alert.js"></script>
+<script src="<?php echo $base_url;?>assets/admin/js/sweetalert/sweetalert2.all.min.js"></script>
 
 <script src="<?php echo $base_url;?>assets/admin/vendors/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="<?php echo $base_url;?>assets/admin/vendors/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -16,3 +19,23 @@
 <script src="<?php echo $base_url;?>assets/admin/vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
 <script src="<?php echo $base_url;?>assets/admin/vendors/datatables.net-buttons/js/buttons.colVis.min.js"></script>
 <script src="<?php echo $base_url;?>assets/admin/js/datatables-init.js"></script>
+
+<script>
+
+  function confirmDelete(deleteUrl) {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // If confirmed, redirect to the specified delete URL
+        window.location.href = deleteUrl;
+      }
+    });
+  }
+</script>

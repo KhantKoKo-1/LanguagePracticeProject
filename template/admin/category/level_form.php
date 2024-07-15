@@ -1,5 +1,5 @@
 <?php
-$title = 'Level Form';
+
 require_once ("../../../layout/admin/header.php");
 require_once ("../../../layout/admin/sidebar.php");
 require_once ("../../../layout/admin/nav.php");
@@ -11,6 +11,17 @@ $success_message =  "";
 $success         = false;
 $error           = false;
 
+if(isset($_GET['level_id'])) {
+    $level_id = $_GET['level_id'];
+    $title = 'Edit Level Form';
+    $level_data = get_level_by_id($mysqli, $level_id);
+    $level_name  =  $level_data['level_name'];
+ } else { 
+    $level_id = '';
+    $title = 'Create Level Form';
+ }
+ 
+
 if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
     $level_name = $mysqli->real_escape_string($_POST["level_name"]);
     if ($level_name == "") {
@@ -20,11 +31,20 @@ if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
 
     if ($error == false) {
         try {
-            $result = save_level($mysqli, $level_name, $user_id);
-        if ($result) {
-            $success = true;
-            $success_message = "Create Level Successful!";
-        }
+            if ($level_id != '') {
+              $result = update_level($mysqli, $level_name, $user_id, $level_id);
+              if ($result) {
+                $success = true;
+                $success_message = "Edit Level Successful!";
+            }
+            } else {
+              $result = save_level($mysqli, $level_name, $user_id);
+              if ($result) {
+                $success = true;
+                $success_message = "Create Level Successful!";
+            }
+            }
+
     }
         catch (Exception $e) {
             // Handle exceptions (e.g., duplicate entry error)
@@ -48,7 +68,7 @@ if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
             <div class="page-title">
                 <ol class="breadcrumb text-right">
                     <li><a href="<?php echo $admin_base_url . 'dashboard/' ?>">Dashboard</a></li>
-                    <li class="active">Create Level Form</li>
+                    <li class="active"><?php echo $title; ?></li>
                 </ol>
             </div>
         </div>
@@ -78,7 +98,13 @@ if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
         <div class="row justify-content-center">
             <div class="card w-75 mt-5">
                 <div class="card-header d-flex justify-content-center">
-                    <strong>Level &nbsp;</strong> Form
+                    <?php if($level_id == "") {
+                        echo "<strong>Create Level &nbsp;</strong> Form";
+                    } else {
+                        echo "<strong>Edit Level &nbsp;</strong> Form";
+                    }
+                    ?>
+                    
                 </div>
                 <form action="" method="post" class="form-horizontal">
                     <div class="card-body card-block">
@@ -97,7 +123,13 @@ if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
                     </div>
                     <div class="card-footer d-flex justify-content-center">
                         <button type="submit" value="1" name="Submit" class="btn btn-primary btn-sm">
-                            <i class="fa fa-dot-circle-o"></i> Create
+                            <i class="fa fa-dot-circle-o"></i> 
+                            <?php if($level_id == "") {
+                                echo "Create";
+                            } else {
+                                echo "Edit";
+                            }
+                            ?>
                         </button>
                         <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                         <button type="reset" id="resetBtn" class="btn btn-danger btn-sm">

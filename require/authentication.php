@@ -9,6 +9,9 @@ if (isset($_SESSION['admin']['user_id']) || isset($_SESSION['admin']['email'])) 
 else if (isset($_SESSION['user']['user_id']) || isset($_SESSION['user']['email'])) {
     $user_id = $_SESSION['user']['user_id'];
 }
+elseif (isset($_COOKIE['id'])) {
+    $user_id = $_COOKIE['id'];
+}
 
 $auth_sql = "SELECT COUNT(user_id) AS total FROM `users` WHERE `user_id` = '$user_id' AND deleted_at IS NULL AND deleted_by IS NULL";
 $auth_result = $mysqli->query($auth_sql);

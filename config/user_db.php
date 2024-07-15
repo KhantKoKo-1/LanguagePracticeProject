@@ -11,6 +11,13 @@ function count_user($mysqli)
     return $num_row;
 }
 
+function get_all_users($mysqli)
+{
+    $sql = "SELECT * FROM `users` WHERE `deleted_by` IS NULL";
+    $result = $mysqli->query($sql);
+    return $result;
+}
+
 function get_user_by_email($mysqli, $email)
 {
     $sql = "SELECT * FROM `users` WHERE users.email = '$email'";

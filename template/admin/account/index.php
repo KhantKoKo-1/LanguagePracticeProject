@@ -3,6 +3,7 @@ $title = 'Create Account';
 require_once ("../../../layout/admin/header.php");
 require_once ("../../../layout/admin/sidebar.php");
 require_once ("../../../layout/admin/nav.php");
+require_once("../../../config/user_db.php");
 
 $user_name = $role = $email = $password = $comfirm_password =  "";
 $user_name_err = $role_err = $email_err = $password_err =  $comfirm_password_err = "";

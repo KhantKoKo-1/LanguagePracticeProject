@@ -26,8 +26,9 @@
                         aria-expanded="false"> <i class="menu-icon fa fa-laptop"></i>Category</a>
                     <ul class="sub-menu children dropdown-menu">
                         <li><i class="fa fa-puzzle-piece"></i><a href="<?php echo $admin_base_url ?>category/level_form.php">Level Form</a></li>
+                        <li><i class="fa fa-puzzle-piece"></i><a href="<?php echo $admin_base_url ?>category/level_table_list.php">Level Table List</a></li>
                         <li><i class="fa fa-puzzle-piece"></i><a href="<?php echo $admin_base_url ?>category/type_form.php">Type Form</a></li>
-                        <li><i class="fa fa-id-badge"></i><a href="<?php echo $admin_base_url ?>category/table_list.php">Table List</a></li>
+                        <li><i class="fa fa-id-badge"></i><a href="<?php echo $admin_base_url ?>category/type_table_list.php">Type Table List</a></li>
                     </ul>
                 </li>
                 <li class="menu-item-has-children dropdown">

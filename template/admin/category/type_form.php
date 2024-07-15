@@ -1,5 +1,4 @@
 <?php
-$title = 'Type Form';
 require_once ("../../../layout/admin/header.php");
 require_once ("../../../layout/admin/sidebar.php");
 require_once ("../../../layout/admin/nav.php");
@@ -12,6 +11,16 @@ $success_message =  "";
 $success         = false;
 $error           = false;
 
+if(isset($_GET['type_id'])) {
+    $type_id = $_GET['type_id'];
+    $title = 'Edit Level Form';
+    $type_data = get_type_by_id($mysqli, $type_id);
+    $type_name  =  $type_data['type_name'];
+ } else { 
+    $type_id = '';
+    $title = 'Create Level Form';
+ }
+
 if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
     $type_name = $mysqli->real_escape_string($_POST["type_name"]);
     if ($type_name == "") {
@@ -21,11 +30,19 @@ if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
 
     if ($error == false) {
         try {
+            if ($type_id != '') {
+                $result = update_type($mysqli, $type_name, $user_id, $type_id);
+                if ($result) {
+                  $success = true;
+                  $success_message = "Edit Level Successful!";
+              }
+              } else {
             $result = save_type($mysqli, $type_name, $user_id);
         if ($result) {
             $success = true;
             $success_message = "Create Type Successful!";
         }
+    }
     }
         catch (Exception $e) {
             // Handle exceptions (e.g., duplicate entry error)
@@ -49,7 +66,7 @@ if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
             <div class="page-title">
                 <ol class="breadcrumb text-right">
                     <li><a href="<?php echo $admin_base_url . 'dashboard/' ?>">Dashboard</a></li>
-                    <li class="active">Create Type</li>
+                    <li class="active"><?php echo $title; ?></li>
                 </ol>
             </div>
         </div>
@@ -71,7 +88,7 @@ if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
         <?php if ($error) { ?>
         <div class="alert alert-danger w-75 mx-auto" role="alert">
             <div class="d-flex justify-content-center">
-            <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
                 <?php echo $error_message ?>
             </div>
         </div>
@@ -92,14 +109,20 @@ if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
                                 <input type="text" id="type_name" name="type_name" placeholder="Enter type Name"
                                     class="form-control" value="<?php echo $type_name; ?>">
                                 <?php if ($type_err !== '') { ?>
-                                    <span class="help-block text-danger"><?php echo $type_err; ?></span>
+                                <span class="help-block text-danger"><?php echo $type_err; ?></span>
                                 <?php } ?>
                             </div>
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-center">
                         <button type="submit" value="1" name="Submit" class="btn btn-primary btn-sm">
-                            <i class="fa fa-dot-circle-o"></i> Create
+                            <i class="fa fa-dot-circle-o"></i>
+                            <?php if($type_id == "") {
+                                echo "Create";
+                            } else {
+                                echo "Edit";
+                            }
+                            ?>
                         </button>
                         <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
                         <button type="reset" id="resetBtn" class="btn btn-danger btn-sm">
