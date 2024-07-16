@@ -34,9 +34,23 @@ if (isset($_POST['register'])) {
   }
 
   if ($password === "") {
-      $validate = false;
-      $password_err = "Password must not be blank!";
+    $validate = false;
+    $password_err = "Password must not be blank!";
   }
+  else {
+  if (strlen($password) > 30) {
+      $validate = false;
+      $password_err .= 'Password is greater than 30 charaters!';
+  } elseif (strlen($password) < 6) {
+      $validate = false;
+      $password_err .= 'Password must be minimum length of 6 characters!';    
+  }    
+  // } elseif (!preg_match($pattern, $password)) {
+  //     $validate = false;
+  //     $password_err .= 'Password must be at least [ one uppercase letter,one lowercase letter,one digit ]!';
+  // }
+}
+
 
   if ($comfirm_password === "") {
       $validate = false;
@@ -73,7 +87,8 @@ if (isset($_POST['register'])) {
 ?>
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -84,57 +99,91 @@ if (isset($_POST['register'])) {
     <link rel="stylesheet" href="<?php echo $base_url;?>assets/common/css/style.css">
     <link rel="stylesheet" href="<?php echo $base_url;?>assets/common/css/custom_style.css">
     <link rel="shortcut icon" href="<?php echo $base_url;?>assets/common/images/favicon.png" />
-  </head>
-  <body>
+</head>
+
+<body>
     <div class="container-scroller">
-      <div class="container-fluid page-body-wrapper full-page-wrapper">
-        <div class="row w-100 m-0">
-          <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
-            <div class="card col-lg-4 mx-auto">
-              <div class="card-body px-5 py-5">
-                <h3 class="card-title text-left mb-3 d-flex justify-content-center text-dark">Register</h3>
-                <?php if($invalid) {?> 
-                <div class="alert">
-                  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-                  <p><?php echo $invalid_err ?></p>
+        <div class="container-fluid page-body-wrapper full-page-wrapper">
+            <div class="row w-100 m-0">
+                <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+                    <div class="card col-lg-4 mx-auto">
+                        <div class="card-body px-5 py-5">
+                            <h3 class="card-title text-left mb-3 d-flex justify-content-center text-dark">Register</h3>
+                            <?php if($invalid) {?>
+                            <div class="alert">
+                                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                                <p><?php echo $invalid_err ?></p>
+                            </div>
+                            <?php } ?>
+                            <form method="POST">
+                                <div class="form-group">
+                                    <label>Username</label>
+                                    <input type="text" name="name" class="form-control p_input"
+                                        value="<?php echo htmlspecialchars($name);?>">
+                                    <p style="color:red"><?= $name_err ?></p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Email</label>
+                                    <input type="text" name="email" class="form-control p_input"
+                                        value="<?php echo htmlspecialchars($email);?>">
+                                    <p style="color:red"><?= $email_err ?></p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input type="password" name="password" class="form-control p_input">
+                                    <p style="color:red"><?= $password_err ?></p>
+                                </div>
+                                <div class="form-group">
+                                    <label>Comfirm Password</label>
+                                    <input type="password" name="comfirm_password" class="form-control p_input">
+                                    <p style="color:red"><?= $comfirm_password_err ?>
+                                  </p>
+                                </div>
+                                <div class="text-center">
+                                    <button type="submit" name="register"
+                                        class="btn btn-primary btn-block enter-btn">Register</button>
+                                </div>
+                                <p class="sign-up text-center">Already have an Account?<a
+                                        href="<?php echo $base_url;?>"> Sign In</a></p>
+                                <p class="terms">By creating an account you are accepting our<a href="#"> Terms &
+                                        Conditions</a></p>
+                            </form>
+                        </div>
+                    </div>
                 </div>
-              <?php } ?>
-                <form method="POST">
-                  <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" name="name" class="form-control p_input" value="<?php echo htmlspecialchars($name);?>">
-                    <p style="color:red"><?= $name_err ?></p>
-                  </div>
-                  <div class="form-group">
-                    <label>Email</label>
-                    <input type="text" name="email" class="form-control p_input" value="<?php echo htmlspecialchars($email);?>">
-                    <p style="color:red"><?= $email_err ?></p>
-                  </div>
-                  <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" name="password" class="form-control p_input">
-                    <p style="color:red"><?= $password_err ?></p>
-                  </div>
-                  <div class="form-group">
-                    <label>Comfirm Password</label>
-                    <input type="password" name="comfirm_password" class="form-control p_input">
-                    <p style="color:red"><?= $comfirm_password_err ?></p>
-                  </div>
-                  <div class="text-center">
-                    <button type="submit" name="register" class="btn btn-primary btn-block enter-btn">Register</button>
-                  </div>
-                  <p class="sign-up text-center">Already have an Account?<a href="<?php echo $base_url;?>"> Sign In</a></p>
-                  <p class="terms">By creating an account you are accepting our<a href="#"> Terms & Conditions</a></p>
-                </form>
-              </div>
+                <!-- content-wrapper ends -->
             </div>
-          </div>
-          <!-- content-wrapper ends -->
+            <!-- row ends -->
         </div>
-        <!-- row ends -->
-      </div>
-      <!-- page-body-wrapper ends -->
+        <!-- page-body-wrapper ends -->
     </div>
     <script src="<?php echo $base_url;?>assets/common/js/alert.js"></script>
-  </body>
+
+    <script>
+    function togglePasswordVisibility(key) {
+        if (key == 1) {
+            if ($('#password').prop('type') == 'password') {
+                $('#password').prop('type', 'text');
+                $('#eye-icon1').removeClass('fa fa-eye');
+                $('#eye-icon1').addClass('fa fa-eye-slash');
+            } else {
+                $('#password').prop('type', 'password');
+                $('#eye-icon1').removeClass('fa fa-eye-slash');
+                $('#eye-icon1').addClass('fa fa-eye');
+            }
+        } else {
+            if ($('#comfirm_password').prop('type') == 'password') {
+                $('#comfirm_password').prop('type', 'text');
+                $('#eye-icon2').removeClass('fa fa-eye');
+                $('#eye-icon2').addClass('fa fa-eye-slash');
+            } else {
+                $('#comfirm_password').prop('type', 'password');
+                $('#eye-icon2').removeClass('fa fa-eye-slash');
+                $('#eye-icon2').addClass('fa fa-eye');
+            }
+        }
+    }
+    </script>
+</body>
+
 </html>

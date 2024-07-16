@@ -1,4 +1,11 @@
 <?php
+
+if(isset($_GET['type_id'])) {
+    $title = 'Edit Level Form';
+ } else {
+    $title = 'Create Level Form';
+ }
+
 require_once ("../../../layout/admin/header.php");
 require_once ("../../../layout/admin/sidebar.php");
 require_once ("../../../layout/admin/nav.php");
@@ -30,6 +37,11 @@ if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
 
     if ($error == false) {
         try {
+            $check_type_name_exist = get_type_by_name($mysqli, $type_name, $type_id);
+            if ($check_type_name_exist) {
+                $error = true;
+                $error_message = "This Type Name is already taken."; 
+            } else{
             if ($type_id != '') {
                 $result = update_type($mysqli, $type_name, $user_id, $type_id);
                 if ($result) {
@@ -42,6 +54,7 @@ if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
             $success = true;
             $success_message = "Create Type Successful!";
         }
+    }
     }
     }
         catch (Exception $e) {
@@ -88,7 +101,6 @@ if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
         <?php if ($error) { ?>
         <div class="alert alert-danger w-75 mx-auto" role="alert">
             <div class="d-flex justify-content-center">
-                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
                 <?php echo $error_message ?>
             </div>
         </div>

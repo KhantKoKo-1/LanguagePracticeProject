@@ -3,7 +3,7 @@ session_start();
 require_once ("./require/common.php");
 require_once ("./config/db.php");
 require_once ("./config/user_db.php");
-require_once ("./require/check_cookies.php");
+// require_once ("./require/check_cookies.php");
 
 $email = $password = $remember = "";
 $email_err = $password_err = $credition_err = "";

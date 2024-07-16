@@ -1,4 +1,9 @@
 <?php
+if (isset($_GET['level_id'])) {
+    $title = 'Edit Level Form';
+} else { 
+    $title = 'Create Level Form';
+}
 
 require_once ("../../../layout/admin/header.php");
 require_once ("../../../layout/admin/sidebar.php");
@@ -11,14 +16,12 @@ $success_message =  "";
 $success         = false;
 $error           = false;
 
-if(isset($_GET['level_id'])) {
+if (isset($_GET['level_id'])) {
     $level_id = $_GET['level_id'];
-    $title = 'Edit Level Form';
     $level_data = get_level_by_id($mysqli, $level_id);
     $level_name  =  $level_data['level_name'];
  } else { 
     $level_id = '';
-    $title = 'Create Level Form';
  }
  
 
@@ -30,21 +33,26 @@ if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
     }
 
     if ($error == false) {
-        try {
-            if ($level_id != '') {
-              $result = update_level($mysqli, $level_name, $user_id, $level_id);
-              if ($result) {
-                $success = true;
-                $success_message = "Edit Level Successful!";
-            }
+        try {  
+            $check_level_name_exist = get_level_by_name($mysqli, $level_name, $level_id);
+            if ($check_level_name_exist) {
+                $error = true;
+                $error_message = "This Level Name is already taken."; 
             } else {
-              $result = save_level($mysqli, $level_name, $user_id);
-              if ($result) {
-                $success = true;
-                $success_message = "Create Level Successful!";
-            }
-            }
-
+                if ($level_id != '') {
+                  $result = update_level($mysqli, $level_name, $user_id, $level_id);
+                  if ($result) {
+                    $success = true;
+                    $success_message = "Edit Level Successful!";
+                }
+                } else {
+                  $result = save_level($mysqli, $level_name, $user_id);
+                  if ($result) {
+                    $success = true;
+                    $success_message = "Create Level Successful!";
+                }
+                }
+            }    
     }
         catch (Exception $e) {
             // Handle exceptions (e.g., duplicate entry error)
@@ -104,7 +112,7 @@ if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
                         echo "<strong>Edit Level &nbsp;</strong> Form";
                     }
                     ?>
-                    
+
                 </div>
                 <form action="" method="post" class="form-horizontal">
                     <div class="card-body card-block">
@@ -123,7 +131,7 @@ if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
                     </div>
                     <div class="card-footer d-flex justify-content-center">
                         <button type="submit" value="1" name="Submit" class="btn btn-primary btn-sm">
-                            <i class="fa fa-dot-circle-o"></i> 
+                            <i class="fa fa-dot-circle-o"></i>
                             <?php if($level_id == "") {
                                 echo "Create";
                             } else {

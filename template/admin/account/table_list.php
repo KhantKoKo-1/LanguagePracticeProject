@@ -94,8 +94,7 @@ if (isset($_GET['err'])) {
                                 $user_id        = $user['user_id'];
                                 $edit_url       = $admin_base_url . "account/index.php?user_id=" . $user_id;
                                 $delete_url     = $admin_base_url . "account/account_delete.php?user_id=" . $user_id;
-                                // $change_pwd_url = $admin_base_url . "index.php?user_id=" . $user_id . "&type=change";  
-                                
+                                $change_pwd_url = $admin_base_url . "account/index.php?user_id=" . $user_id . "&type=change";  
                                 ?>
                                 
                                 <tr>
@@ -112,7 +111,7 @@ if (isset($_GET['err'])) {
                                         <a href="javascript:void(0)" class="btn btn-danger btn-sm" onclick="confirmDelete('<?php echo $delete_url; ?>')">
                                             <i class="fa fa-trash-o"></i> Delete
                                         </a>
-                                        <a href="<?php echo $edit_url?>" class="btn btn-primary btn-sm"><i class="fa fa-arrows"></i>Change Password</a>
+                                        <a href="<?php echo $change_pwd_url?>" class="btn btn-primary btn-sm"><i class="fa fa-arrows"></i>Change Password</a>
                                     </td>
                                 </tr>
                             <?php $i++; } ?>    

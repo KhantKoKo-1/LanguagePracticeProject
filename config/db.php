@@ -29,12 +29,11 @@ function create_table($mysqli)
 {
     $sql = "CREATE TABLE IF NOT EXISTS `users` (
         `user_id` INT AUTO_INCREMENT,
-        `name` VARCHAR(20) NOT NULL UNIQUE,
-        `email` VARCHAR(45) NOT NULL UNIQUE,
-        -- `u_address` VARCHAR(255) NOT NULL,
+        `name` VARCHAR(20) NOT NULL,
+        `email` VARCHAR(45) NOT NULL,
         `password` VARCHAR(255) NOT NULL,
         `role` TINYINT NOT NULL DEFAULT 1 COMMENT '0 for admin, 0 for user',
-        `created_by` INT DEFAULT 0 COMMENT '0 for created by user',
+        `created_by` INT COMMENT '0 for created by user',
         `created_at` DATETIME NOT NULL,
         `updated_by` INT DEFAULT NULL,
         `updated_at` DATETIME DEFAULT NULL,
@@ -50,7 +49,7 @@ function create_table($mysqli)
 
     $sql = "CREATE TABLE IF NOT EXISTS `level`(
         `level_id` INT AUTO_INCREMENT, 
-        `level_name` VARCHAR (100) NOT NULL UNIQUE,
+        `level_name` VARCHAR (100) NOT NULL,
         `created_by` INT NOT NULL,
         `created_at` DateTime NOT NULL,
         `updated_by` INT DEFAULT NULL,
@@ -67,7 +66,7 @@ function create_table($mysqli)
 
     $sql = "CREATE TABLE IF NOT EXISTS `type`(
         `type_id` INT AUTO_INCREMENT , 
-        `type_name` VARCHAR (100) NOT NULL UNIQUE,
+        `type_name` VARCHAR (100) NOT NULL,
         `created_by` INT NOT NULL,
         `created_at` DateTime NOT NULL,
         `updated_by` INT DEFAULT NULL,
