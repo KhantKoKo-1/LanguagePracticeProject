@@ -25,11 +25,11 @@ $sql = "UPDATE `type` SET
  $result = $mysqli->query($sql);
 
  if($result) {
-    $url =  $admin_base_url . "category/type_table_list.php?msg=delete";
+    $url =  $admin_base_url . "category/type_list.php?msg=delete";
     header("Refresh: 0; url=$url");
     exit();
  } else {
-    $url =  $admin_base_url . "category/type_table_list.php.php?err=delete";
+    $url =  $admin_base_url . "category/type_list.php?err=delete";
     header("Refresh: 0; url=$url");
     exit();
  }

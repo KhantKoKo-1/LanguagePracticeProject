@@ -60,7 +60,7 @@ if (isset($_POST['login'])) {
             $_SESSION['user']['user_id'] = $id;
             $_SESSION['user']['email'] = $user['email'];
             $_SESSION['user']['username'] = $user['name'];
-            $url = $user_base_url . 'dashboard/';
+            $url = $user_base_url . 'home/';
           }
 
           header("Refresh: 0; url=$url");

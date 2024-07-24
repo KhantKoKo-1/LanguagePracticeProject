@@ -2,7 +2,7 @@
 
 function count_user($mysqli)
 {
-    $sql = "SELECT * FROM `users` WHERE `deleted_by` IS NULL";
+    $sql = "SELECT * FROM `users` WHERE `deleted_by` IS NULL ORDER BY `user_id` DESC";
     $result = $mysqli->query($sql);
     $num_row = 0;
     if ($result) {

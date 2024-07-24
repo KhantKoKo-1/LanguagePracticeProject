@@ -9,6 +9,7 @@ function get_all_types($mysqli)
 
 function get_type_by_id($mysqli, $type_id)
 {
+    $type_id = intval($type_id);
     $sql = "SELECT * FROM `type` WHERE `type_id`= $type_id AND `deleted_by` IS NULL";
     $result = $mysqli->query($sql);
     if ($result)  return $result->fetch_assoc();
@@ -16,13 +17,15 @@ function get_type_by_id($mysqli, $type_id)
 
 function get_type_by_name($mysqli, $type_name, $type_id)
 {
-    $sql = "SELECT * FROM `type` WHERE `type_name`= '$type_name' AND `type_id` != $type_id AND `deleted_by` IS NULL";
+    $type_id = intval($type_id);
+    $sql = "SELECT * FROM `type` WHERE `type_name`= '$type_name' AND `type_id` != $type_id AND `deleted_by` IS NULL ORDER BY `type_id` DESC";
     $result = $mysqli->query($sql);
     if ($result) return $result->fetch_assoc();
 }
 
 function update_type($mysqli, $type_name, $updated_by, $type_id)
 {
+    $type_id = intval($type_id);
     $currentDateTime = date('Y-m-d H:i:s');
     $sql = "UPDATE `type` SET `type_name`='$type_name', `updated_by`='$updated_by',`updated_at`='$currentDateTime' WHERE `type_id`= $type_id ";
     if ($mysqli->query($sql)) {

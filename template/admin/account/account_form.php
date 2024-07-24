@@ -119,27 +119,38 @@ if (isset($_POST['register']) && $_POST['register'] == 2) {
             if ($id && $type == "") {
                 $result  = update_user_info($mysqli, $user_name, $email, $role, $user_id, $id);
                 $message = "Edit User Info Successful!";
-                $url = $admin_base_url . "account/table_list.php?msg=editInfo";
+                if ($result) {
+                    $url = $admin_base_url . "account/account_list.php?msg=editInfo";
+                } else {
+                    $url = $admin_base_url . "account/account_list.php?err=editInfo";
+                }    
             } else if ($id && $type != "") {
                 $user = get_user_by_id($mysqli, $id);
                 $match = password_verify($old_password, $user['password']);
                 if ($match) {
                     $result  = update_user_password($mysqli, $hash_password, $user_id, $id);
-                    $message = "Edit User Password Successful!"; 
-                    $url = $admin_base_url . "account/table_list.php?msg=editPassword";
+                    if ($result) {
+                        $url = $admin_base_url . "account/account_list.php?msg=editPassword";
+                    } else {
+                        $url = $admin_base_url . "account/account_list.php?err=editPassword";
+                    }
                 } else {
                     $validate = false;
                     $old_password_err = "Old password does not match";
                 }
             } else {
-                $result  = save_user($mysqli, $user_name, $email, $hash_password, $role, $user_id); 
-                $message = "Create User Account Successful!";
-                $url = $admin_base_url . "account/table_list.php?msg=create";
-            }        
+                $result  = save_user($mysqli, $user_name, $email, $hash_password, $role, $user_id);
+                if ($result) {
+                    $url = $admin_base_url . "account/account_list.php?msg=create";
+                } else {
+                    $url = $admin_base_url . "account/account_list.php?err=create";
+                }
+            }
+
             if ($validate) {
                 if($result) {
                     $success = true;
-                    echo '<script>window.location.href = "' . $url . '";</script>';
+                    echo '<meta http-equiv="refresh" content="0;url=' . $url . '">';
                     exit();
                 }
             }
@@ -184,21 +195,15 @@ if (isset($_POST['register']) && $_POST['register'] == 2) {
 <!-- <div class="row"> -->
 <div class="content mt-3">
     <div class="animated fadeIn">
-        <?php if ($success) { ?>
-        <div class="alert alert-success mx-auto" role="alert">
-            <div class="d-flex justify-content-center">
-                <?php echo $success_message ?>
-            </div>
-        </div>
-        <?php } ?>
-
         <?php if ($invalid) { ?>
-        <div class="alert alert-danger mx-auto" role="alert">
-            <div class="d-flex justify-content-center">
-                <?php echo $invalid_err ?>
+            <div class="alert  alert-danger alert-dismissible fade show w-75 mx-auto" role="alert">
+                <span class="badge badge-pill badge-danger">Error</span>  <?php echo $invalid_err ?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-        </div>
         <?php } ?>
+        
         <div class="card">
             <div class="card-header d-flex justify-content-center fw-bold"><?php echo $title; ?></div>
             <div class="card-body card-block">

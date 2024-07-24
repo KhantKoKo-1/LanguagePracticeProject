@@ -1,5 +1,10 @@
 <?php
-$title = 'Questions Form';
+if (isset($_GET['question_id'])) {
+    $title = 'Edit Question Form';
+ } else {
+    $title = 'Create Question Form';
+ }
+
 require_once ("../../../layout/admin/header.php");
 require_once ("../../../layout/admin/sidebar.php");
 require_once ("../../../layout/admin/nav.php");
@@ -14,7 +19,7 @@ $types  = get_all_types($mysqli);
 
 $description = $level_id = $type_id =  "";
 $description_err = $quizs_err = $type_err = $level_err = $correct_answer_err =  "";
-$correct_answer  = "";
+$correct_answer  = [];
 $is_correct      = false;    
 $quizzes         = [];
 $error_message   =  "";
@@ -22,17 +27,36 @@ $success_message =  "";
 $success         = false;
 $error           = false;
 $invalid         = false;
- 
+
+if (isset($_GET['question_id'])) {
+    $question_id   = $_GET['question_id'];
+    $question_data = get_question_by_id($mysqli, $question_id);
+    $description   =  $question_data['description'];
+    $level_id      =  $question_data['level_id'];
+    $type_id       =  $question_data['type_id'];
+    $quiz_infos    = get_quizzes_by_question_id($mysqli, $question_id);
+    $quiz_description = '';
+    while ($quiz_info = $quiz_infos->fetch_assoc()) {
+        $quizzes[]    = $quiz_info['description'];
+        $is_correct   = $quiz_info['is_correct'];
+        if ($is_correct) {
+            $correct_answer = htmlspecialchars($quiz_info['description']);                                
+        }
+    }
+
+ } else { 
+    $question_id = '';
+ }
+
 $quiz_sub_names = ['A', 'B', 'C', 'D'];
 
 if (isset($_POST['Submit'])) {
     $description = $mysqli->real_escape_string($_POST["description"]);
-    // echo $description;
-    // exit();
-    $level_id        = $mysqli->real_escape_string($_POST["level_id"]);
-    $type_id         = $mysqli->real_escape_string($_POST["type_id"]);
-    $quizzes         = isset($_POST["quizzes"]) ? $_POST["quizzes"] : [];
-    $correct_answer  = isset($_POST["correct_answer"]) ? $_POST["correct_answer"] : '';
+;
+    $level_id       = $mysqli->real_escape_string($_POST["level_id"]);
+    $type_id        = $mysqli->real_escape_string($_POST["type_id"]);
+    $quizzes        = isset($_POST["quizzes"]) ? $_POST["quizzes"] : [];
+    $correct_answer = isset($_POST["correct_answer"]) ? $_POST["correct_answer"] : '';
 
     if ($description == "") {
         $description_err = "Please Enter Description!"; 
@@ -64,26 +88,79 @@ if (isset($_POST['Submit'])) {
         }
     }
 
-    if ($correct_answer == '') {
+    if ($correct_answer == "") {
         $correct_answer_err = "Please Chooice One For Correct Correct Answer!";
         $error = true;
     }
 
     if ($error == false) {
         try {
-            $result = save_questions($mysqli, $description, $level_id, $type_id, $user_id);
-        if ($result) {
-            $last_inserted_id = $mysqli->insert_id;
-            foreach ($quizzes as $index => $quiz) {
-                if ($is_correct == $quiz) {
-                    $is_correct = true;
+            if ($question_id != "") {
+                $result = update_questions($mysqli, $question_id, $description, $level_id, $type_id, $user_id);
+                if ($result) {
+                    foreach ($quizzes as $index => $quiz) {
+                        $quiz_delete_res = delete_quiz($mysqli, $question_id);
+                        if ($quiz_delete_res) {
+                            $success = true; 
+                        } else {
+                            $success = false;
+                        }
+                    }
+
+                    if ($success) {
+                        foreach ($quizzes as $index => $quiz) {
+                            if ($correct_answer[0] == $quiz) {
+                                $is_correct = true;
+                            } else {
+                                $is_correct = false;
+                            }
+    
+                            $quiz_result = save_quizzes($mysqli, $quiz, $is_correct,$question_id, $user_id);
+                            if ($quiz_result) {
+                                $success = true;
+                            } else {
+                                $success = false;
+                            }
+                        }
+                    }
+
+                    if ($success) {
+                        $url =  $admin_base_url . "questions/question_list.php?msg=edit";
+						echo '<meta http-equiv="refresh" content="0;url=' . $url . '">';
+						exit();
+                    } else {
+                        $url =  $admin_base_url . "questions/question_list.php?err=edit";
+						echo '<meta http-equiv="refresh" content="0;url=' . $url . '">';
+                        exit();
+                    }
                 }
-                $quiz_result = save_quizzes($mysqli, $quiz, $is_correct,$last_inserted_id, $user_id);
-            }
-            if ($result) {
-                $success = true;
-                $success_message = "Create Question Successful!";
-            }
+            } else {
+                $result = save_questions($mysqli, $description, $level_id, $type_id, $user_id);
+                if ($result) {
+                    $last_inserted_id = $mysqli->insert_id;
+                    foreach ($quizzes as $index => $quiz) {
+                        if ($correct_answer[0] == $quiz) {
+                            $is_correct = true;
+                        } else {
+                            $is_correct = false;
+                        }
+                        $quiz_result = save_quizzes($mysqli, $quiz, $is_correct,$last_inserted_id, $user_id);
+                        if ($quiz_result) {
+                            $success = true;
+                        } else {
+                            $success = false;
+                        }
+                    }
+                    if ($success) {
+                        $url =  $admin_base_url . "questions/question_list.php?msg=create";
+						echo '<meta http-equiv="refresh" content="0;url=' . $url . '">';
+                        exit();
+                    } else {
+                        $url =  $admin_base_url . "questions/question_list.php?err=create";
+						echo '<meta http-equiv="refresh" content="0;url=' . $url . '">';
+                        exit();
+                    }
+                }
         }
     }
         catch (Exception $e) {
@@ -99,7 +176,7 @@ if (isset($_POST['Submit'])) {
     <div class="col-sm-4">
         <div class="page-header float-left">
             <div class="page-title">
-                <h1>Create Questions</h1>
+                <h1><?php echo $title?></h1>
             </div>
         </div>
     </div>
@@ -108,7 +185,7 @@ if (isset($_POST['Submit'])) {
             <div class="page-title">
                 <ol class="breadcrumb text-right">
                     <li><a href="<?php echo $admin_base_url . 'dashboard/' ?>">Dashboard</a></li>
-                    <li class="active">Create Level</li>
+                    <li class="active"><?php echo $title?></li>
                 </ol>
             </div>
         </div>
@@ -125,11 +202,12 @@ if (isset($_POST['Submit'])) {
         </div>
         <?php } ?>
         <?php if ($invalid) { ?>
-        <div class="alert alert-danger mx-auto" role="alert">
-            <div class="d-flex justify-content-center">
-                <?php echo $error_message ?>
+        <div class="alert  alert-danger alert-dismissible fade show w-75 mx-auto" role="alert">
+                <span class="badge badge-pill badge-danger">Error</span>  <?php echo $error_message ?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-        </div>
         <?php } ?>
         <div class="card">
             <form action="" method="post" class="form-horizontal">
@@ -251,7 +329,7 @@ if (isset($_POST['Submit'])) {
                             <div class="col-2">
                                 <button type="button" id="quiz_<?php echo $quiz_sub_names[$i]; ?>"
                                     class="btn btn-danger minus_button"
-                                    onclick=" removeAllInputContainers(<?php echo $i; ?>)">
+                                    onclick="removeAllInputContainers(<?php echo $i; ?>)">
                                     <span class="fa fa-minus-square-o"></span>
                                 </button>
                             </div>
@@ -421,24 +499,24 @@ function handleModalClose() {
 
     Object.keys(quizValues).forEach(key => {
     // Create HTML string for each row
+    let correctAnswer = <?php echo json_encode($correct_answer); ?>;
+    let isChecked     = (quizValues[key] == correctAnswer) ? 'checked' : '';
     let html = `
-        <div class="row input-container mt-2">
-            <div class="col-8 ml-3">
-                <input type="text" name="quizzes[]" value="${quizValues[key]}" placeholder="Quiz ${key}" class="form-control" readonly>
-            </div>
-             <div class="col-2">
-                <div class="form-check mt-2">
-                    <input type="checkbox" id="${key}_correct" name="correct_answer" value="${quizValues[key]}" class="form-check-input quizes_status" onchange="handleCheckboxChange(this)">
-                    <label for="${key}_correct" class="form-check-label">Correct</label>
+            <div class="row input-container mt-2">
+                <div class="col-8 ml-3">
+                    <input type="text" name="quizzes[]" value="${quizValues[key]}" placeholder="Quiz ${key}" class="form-control" readonly>
+                </div>
+                <div class="col-2">
+                    <div class="form-check mt-2">
+                        <input type="checkbox" id="${key}_correct" name="correct_answer[]" value="${quizValues[key]}" ${isChecked} class="form-check-input quizes_status" onchange="handleCheckboxChange(this)">
+                        <label for="${key}_correct" class="form-check-label">Correct</label>
+                    </div>
                 </div>
             </div>
-        </div>
-    `;
-
+        `;
     // Append the HTML string to the container
     containerDiv.innerHTML += html;
 });
-
 
 }
 

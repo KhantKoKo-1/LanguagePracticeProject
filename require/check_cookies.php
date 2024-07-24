@@ -17,7 +17,7 @@ while ($auth_row = $auth_result->fetch_assoc()) {
             $url = $admin_base_url . 'dashboard/';
         }
         else if ($auth_row['role'] == $user_role) {
-            $url = $user_base_url . 'home/';
+            $url = $user_base_url . 'user.php';
         }
     }
 }

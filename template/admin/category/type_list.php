@@ -3,9 +3,9 @@ $title = 'Dashboard';
 require_once ("../../../layout/admin/header.php");
 require_once ("../../../layout/admin/sidebar.php");
 require_once ("../../../layout/admin/nav.php");
-require_once("../../../config/level_db.php");
+require_once("../../../config/type_db.php");
 
-$levels = get_all_levels($mysqli);
+$types = get_all_types($mysqli);
 $i = 0;
 $success = false;
 $error   = false;
@@ -15,13 +15,13 @@ if (isset($_GET['msg'])) {
     $success = true;
     switch ($_GET['msg']) {
         case 'create':
-            $success_message = 'Level create is success'; 
+            $success_message = 'Type create is success'; 
             break;
         case 'edit':
-            $success_message = 'Level update is success'; 
+            $success_message = 'Type update is success'; 
             break;
         case 'delete':
-            $success_message = 'Level delete is success'; 
+            $success_message = 'Type delete is success'; 
             break;
         default:
             // Default case or additional handling
@@ -33,13 +33,13 @@ if (isset($_GET['err'])) {
   $error = true;
   switch ($_GET['err']) {
       case 'create':
-          $error_message = 'Level create is fail'; 
+          $error_message = 'Type create is fail'; 
           break;
       case 'edit':
-          $error_message = 'Level update is fail'; 
+          $error_message = 'Type update is fail'; 
           break;
       case 'delete':
-          $error_message = 'Level delete is fail'; 
+          $error_message = 'Type delete is fail'; 
           break;
       default:
           // Default case or additional handling
@@ -53,7 +53,7 @@ if (isset($_GET['err'])) {
     <div class="col-sm-4">
         <div class="page-header float-left">
             <div class="page-title">
-                <h1>Dashboard</h1>
+                <h1>Type List</h1>
             </div>
         </div>
     </div>
@@ -62,7 +62,7 @@ if (isset($_GET['err'])) {
             <div class="page-title">
                 <ol class="breadcrumb text-right">
                     <li><a href="<?php echo $admin_base_url . 'dashboard/' ?>">Dashboard</a></li>
-                    <li class="active">Level table List</li>
+                    <li class="active">Type List</li>
                 </ol>
             </div>
         </div>
@@ -76,28 +76,28 @@ if (isset($_GET['err'])) {
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <strong class="card-title">Level Table</strong>
+                        <strong class="card-title">Type Table</strong>
                     </div>
                     <div class="card-body">
                         <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Level Name</th>
+                                    <th>Type Name</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                            <?php while ($level = $levels->fetch_assoc()) {
-                                $level_id        = $level['level_id'];
-                                $edit_url       = $admin_base_url . "category/level_form.php?level_id=" . $level_id;
-                                $delete_url     = $admin_base_url . "category/level_delete.php?level_id=" . $level_id; 
-
+                            <?php while ($type = $types->fetch_assoc()) {
+                                $type_id        = $type['type_id'];
+                                $edit_url       = $admin_base_url . "category/type_form.php?type_id=" . $type_id;
+                                $delete_url     = $admin_base_url . "category/type_delete.php?type_id=" . $type_id; 
+                                
                             ?>
                                 
                                 <tr>
                                     <td><?php echo $i + 1 ?></td>
-                                    <td><?php echo $level['level_name']; ?></td>
+                                    <td><?php echo $type['type_name']; ?></td>
                                     <td>
                                         <a href="<?php echo $edit_url?>" class="btn btn-info btn-sm"><i class="fa fa-pencil"></i> Edit </a>
                                         <a href="javascript:void(0)" class="btn btn-danger btn-sm" onclick="confirmDelete('<?php echo $delete_url; ?>')">
@@ -118,6 +118,7 @@ if (isset($_GET['err'])) {
 
 <?php
 require_once ("../../../layout/admin/footer.php");
+require_once ("../../../layout/admin/table_footer.php");
 ?>
 
 </body>

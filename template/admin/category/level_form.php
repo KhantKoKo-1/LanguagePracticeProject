@@ -42,14 +42,26 @@ if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
                 if ($level_id != '') {
                   $result = update_level($mysqli, $level_name, $user_id, $level_id);
                   if ($result) {
-                    $success = true;
-                    $success_message = "Edit Level Successful!";
+                    $url =  $admin_base_url . "category/level_list.php?msg=edit";
+                    echo '<meta http-equiv="refresh" content="0;url=' . $url . '">';
+                    exit();
+                } else {
+                    $url =  $admin_base_url . "category/level_list.php?err=edit";
+                    echo '<meta http-equiv="refresh" content="0;url=' . $url . '">';
+                    exit();
                 }
+
                 } else {
                   $result = save_level($mysqli, $level_name, $user_id);
                   if ($result) {
                     $success = true;
-                    $success_message = "Create Level Successful!";
+                    $url =  $admin_base_url . "category/level_list.php?msg=create";
+                    echo '<meta http-equiv="refresh" content="0;url=' . $url . '">';
+                    exit();
+                } else {
+                    $url =  $admin_base_url . "category/level_list.php?err=create";
+                    echo '<meta http-equiv="refresh" content="0;url=' . $url . '">';
+                    exit();
                 }
                 }
             }    
@@ -87,20 +99,15 @@ if (isset($_POST['Submit']) && $_POST['Submit'] == 1) {
 <div class="content mt-3">
     <div class="animated fadeIn">
         <!-- <div class="row"> -->
-        <?php if ($success) { ?>
-        <div class="alert alert-success w-75 mx-auto" role="alert">
-            <div class="d-flex justify-content-center">
-                <?php echo $success_message ?>
-            </div>
-        </div>
-        <?php } ?>
 
-        <?php if ($error) { ?>
-        <div class="alert alert-danger w-75 mx-auto" role="alert">
-            <div class="d-flex justify-content-center">
-                <?php echo $error_message ?>
+
+        <?php if ($error_message != "") { ?>
+            <div class="alert  alert-danger alert-dismissible fade show w-75 mx-auto" role="alert">
+                <span class="badge badge-pill badge-danger">Error</span>  <?php echo $error_message ?>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
-        </div>
         <?php } ?>
 
         <div class="row justify-content-center">
